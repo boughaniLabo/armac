@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { InvoiceModule } from './invoices/invoices.module';
 import { ProductsModule } from './products/products.module';
 import { Product } from './users/entities/product.entity';
+import { OrderModule } from './orders/orders.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -21,7 +22,7 @@ import { Product } from './users/entities/product.entity';
 
   }),
   UsersModule,
-  InvoiceModule,ProductsModule
+  InvoiceModule,ProductsModule,OrderModule
 ],
   controllers: [AppController],
   providers: [AppService],
