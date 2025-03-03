@@ -123,7 +123,10 @@ export class OrderService {
     order.orderItems.forEach((item) => {
       doc.text(item.product.name, 55, startY);
       doc.text(item.quantity.toString(), 250, startY);
-      doc.text(`${item.product.price.toFixed(2)} DA`, 320, startY);
+      const price = Number(item.product.price) || 0; // Convertir et éviter NaN
+      doc.text(`${price.toFixed(2)} DA`, 320, startY);
+            Number(item.product.price) || 0; // Convertir et éviter NaN
+
       doc.text(`${item.price.toFixed(2)} DA`, 420, startY);
       startY += 20;
     });
