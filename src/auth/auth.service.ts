@@ -34,7 +34,7 @@ export class AuthService {
 
 async validateUser(email: string, password: string): Promise<User | null> {
   // Use the 'findOne' method with relations to load the profile and doctorDetails
-  const user = await this.usersService.findOne(email, { relations: ['profile', 'doctorDetails'] });
+  const user = await this.usersService.findOne(email, { relations: ['profile'] });
 
   // If the user is found and the password matches
   if (user && (await bcrypt.compare(password, user.password))) {

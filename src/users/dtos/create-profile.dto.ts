@@ -17,7 +17,5 @@ export class CreateProfileDto {
   @IsString()
   address?: string;
 
-  @IsOptional()
-  @IsString()
-  medicalHistory?: string;
+
 }
