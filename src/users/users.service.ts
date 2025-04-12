@@ -67,5 +67,25 @@ export class UsersService {
   
     return query.getMany();
   }
+//ajouter employer
+  async addUser(userData: Partial<User>): Promise<User> {
+    const newUser = this.usersRepository.create(userData);
+    return this.usersRepository.save(newUser);
+  }
   
+  async getAllUsers(): Promise<User[]> {
+    return this.usersRepository.find();
+  }
+
+
+  
+  async deleteUser(id: number): Promise<{ message: string }> {
+    const result = await this.usersRepository.delete(id);
+    
+    if (result.affected === 0) {
+      throw new Error(`Utilisateur avec l'ID ${id} non trouvé`);
+    }
+  
+    return { message: `Utilisateur avec l'ID ${id} supprimé` };
+  }
 }

@@ -1,5 +1,6 @@
-import { Controller, Get, Query, ParseFloatPipe } from '@nestjs/common';
+import { Controller, Get, Query, ParseFloatPipe, Post, Body, Delete, ParseIntPipe, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -26,4 +27,20 @@ export class UsersController {
       parsedRadius,
     );
   }
+
+
+  @Post('add')
+  async addUser(@Body() userData: Partial<User>): Promise<User> {
+    return this.usersService.addUser(userData);
+  }
+
+  @Get()
+  async getAllUsers(): Promise<User[]> {
+    return this.usersService.getAllUsers();
+  }
+  @Delete(':id')
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.deleteUser(id);
+  }
+
 }

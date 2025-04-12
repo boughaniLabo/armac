@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Profile } from './profile.entity';
+import { Product } from './product.entity';
+import { Order } from './order.entity';
 
 export enum UserRole {
     PATIENT = 'user',
@@ -10,16 +12,16 @@ export enum UserRole {
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
-    id?: number;
+    id: number;
 
     @Column({ unique: true })
-    email?: string;
+    email: string;
 
-    @Column({ unique: true, nullable: true })
+    @Column({ nullable: true })
     name?: string;
 
     @Column()
-    password?: string;
+    password: string;
 
     @Column({
         type: 'enum',
@@ -29,9 +31,15 @@ export class User {
     role: UserRole = UserRole.MANAGER;
 
     @Column({ default: true })
-    isActive?: boolean;
+    isActive: boolean;
 
     @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
     @JoinColumn()
     profile?: Profile;
+
+    @OneToMany(() => Product, (product) => product.user)
+    products: Product[];
+
+    @OneToMany(() => Order, (order) => order.user)
+    orders: Order[];
 }
