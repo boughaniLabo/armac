@@ -32,15 +32,18 @@ export class AuthController {
     try {
       // Validate and decode the token
       const validatedToken = await this.authService.validateToken(token);
-
+      console.log(validatedToken);
+      
       // Format and return the validated token response
       return {
         access_token: token,
         user: {
+          id: validatedToken.id,
           email: validatedToken.email,
           role: validatedToken.role,
           profile: validatedToken.profile || null, // Ensure profile is included, if available
         },
+      
       };
     } catch (error) {
       throw new UnauthorizedException('Invalid or expired token');

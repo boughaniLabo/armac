@@ -59,11 +59,7 @@ async login(user: User) {
   // Return the access token and user details (excluding password)
   return {
     access_token,
-    user: {
-      email: userWithoutPassword.email,
-      role: userWithoutPassword.role,
-      profile: userWithoutPassword.profile,  // Include profile if it's available
-    },
+    user:userWithoutPassword,
   };
 }
 async validateToken(token: string) {
@@ -78,12 +74,10 @@ async validateToken(token: string) {
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
-
+    const { password, ...userWithoutPassword } = user;
     // Return the decoded token payload along with user details
     return {
-      email: user.email,
-      role: user.role,
-      profile: user.profile, // Include profile if it exists
+      ...userWithoutPassword
     };
   } catch (error) {
     throw new UnauthorizedException('Invalid token');

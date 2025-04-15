@@ -10,13 +10,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
     type: 'mysql',
     host: 'localhost',
-    port: 3300,
-    username: 'root',
+    port: 3306,
+    username: 'boughani',
     password: 'boughani',
     database: 'armac',
     entities: [__dirname + '/**/*.entity{.ts,.js}',Product],
@@ -25,7 +28,8 @@ import { AppService } from './app.service';
 
   }),
   UsersModule,
-  InvoiceModule,ProductsModule,OrderModule
+  InvoiceModule,ProductsModule,OrderModule , 
+  AuthModule
 ],
   controllers: [AppController],
   providers: [AppService],
