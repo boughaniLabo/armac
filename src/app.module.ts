@@ -18,8 +18,8 @@ import { ConfigModule } from '@nestjs/config';
     TypeOrmModule.forRoot({
     type: 'mysql',
     host: 'localhost',
-    port: 3306,
-    username: 'boughani',
+    port: 3300,
+    username: 'root',
     password: 'boughani',
     database: 'armac',
     entities: [__dirname + '/**/*.entity{.ts,.js}',Product],

@@ -1,16 +1,24 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
-import { Profile } from './profile.entity';
+// src/invoices/entities/invoice.entity.ts
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
+import { InvoiceItem } from './invoice_item.entity';
 
+@Entity('invoices')
+export class Invoice {
+  @PrimaryGeneratedColumn()
+  id: number;
 
+  @Column({ unique: true })
+  name: string;
 
+  @Column({ type: 'date' })
+  date: string;
 
-export class invoice {
-    @PrimaryGeneratedColumn()
-    id?: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  total: number;
 
-   
+  @OneToMany(() => InvoiceItem, (item) => item.invoice, { cascade: true })
+  items: InvoiceItem[];
 
-    @Column({ unique: true, nullable: true })
-    name?: string;
-
+  @CreateDateColumn()
+  createdAt: Date;
 }

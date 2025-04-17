@@ -1,11 +1,14 @@
-import { Controller, Post, Body, Get, Param, Res } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Res, Delete } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Response } from 'express';
 
 @Controller('orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
-
+  @Get()
+  async getAllOrders() {
+    return this.orderService.getAllOrders();
+  }
   //  CREER UNE COMMANDE
   @Post()
   async createOrder(@Body() body: { userId: number; items: { productId: number; quantity: number }[] }) {
@@ -22,5 +25,10 @@ export class OrderController {
   @Get(':orderId/pdf')
   async downloadOrderPDF(@Param('orderId') orderId: number, @Res({ passthrough: true }) res: Response) {
     return this.orderService.generateOrderPDF(orderId, res);
+  }
+
+  @Delete(':id')
+  async deleteOrder(@Param('id') id: number) {
+    return this.orderService.deleteOrder(Number(id));
   }
 }

@@ -25,6 +25,15 @@ export class OrderService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+
+  async getAllOrders() {
+    return this.orderRepository.find({
+      relations: ['user', 'orderItems', 'orderItems.product'],
+      order: { createdAt: 'DESC' }, // optionnel : pour trier les plus récentes en premier
+    });
+  }
+  
+
   // CREER UNE COMMANDE
   async createOrder(userId: number, items: { productId: number; quantity: number }[]): Promise<Order> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
@@ -77,6 +86,24 @@ export class OrderService {
     });
   }
 
+// order.service.ts
+async deleteOrder(id: number) {
+  const order = await this.orderRepository.findOne({
+    where: { id },
+    relations: ['orderItems'], // Charger les orderItems (et non items)
+  });
+
+  if (!order) {
+    throw new NotFoundException(`Commande avec l'ID ${id} non trouvée`);
+  }
+
+  // Supprimer la commande (et en cascade, les orderItems)
+  await this.orderRepository.remove(order);
+
+  return { message: `Commande avec l'ID ${id} supprimée` };
+}
+
+
   // GENERER UN PDF DE COMMANDE
   async generateOrderPDF(orderId: number, res: Response): Promise<StreamableFile> {
     const order = await this.orderRepository.findOne({
@@ -127,8 +154,9 @@ export class OrderService {
       doc.text(`${price.toFixed(2)} DA`, 320, startY);
             Number(item.product.price) || 0; // Convertir et éviter NaN
 
-      doc.text(`${item.price.toFixed(2)} DA`, 420, startY);
-      startY += 20;
+            const itemPrice = Number(item.price) || 0;
+            doc.text(`${itemPrice.toFixed(2)} DA`, 420, startY);
+                  startY += 20;
     });
 
     doc.moveDown();

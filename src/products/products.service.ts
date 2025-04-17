@@ -14,6 +14,16 @@ export class ProductsService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+
+  async findById(id: number): Promise<Product> {
+    const product = await this.productRepository.findOne({ where: { id } });
+    
+    if (!product) {
+      throw new NotFoundException(`Produit avec l'ID ${id} non trouvé`);
+    }
+
+    return product;
+  }
   async createProduct(name: string, price: number, quantity: number, userId: number, imageUrl?: string) {
     const user = await this.userRepository.findOne({ where: { id: userId } });
 
